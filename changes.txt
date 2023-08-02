@@ -1,0 +1,21 @@
+--> Date and time <--
+2023-08-02T10:05:57-03:00
+
+--> Persistent files changes <--
+
+--> Temporary files changes <--
+D  about-me.pdf
+
+--> Temporary files hashes <--
+835aee1f55a2892a5f3b624b4ed9840e2e32fbbaa4681dc350dfc563a04de87a  ./fork.sh
+e81653de74b7bb15e689c6bc9cb49ce919a4864911319f156484ad177e9140fd  ./ft2324/page-preview-1/images/0.png
+fc8e4ed2819c30cd0669d031ff1dfa73d296d3e9582d5d98d4b62137758b353a  ./ft2324/page-preview-1/images/1.png
+4ca67920b75e62fedc2015b538eb22bd3cece6e42aab76e3e1a8f2ed65d3bf22  ./ft2324/page-preview-1/images/2.png
+72f3e72a51e39b7190c923d7e54209f6da969ad33c32b7d1e89718a30c897223  ./ft2324/page-preview-1/images/3.png
+dc82ce7ae435f11cb0b1b4feeb502f40b585a93e1ebf4398300099eaf75c2674  ./ft2324/page-preview-1/images/4.png
+f91a14e313450db80f0c2a70ca5abc16ea4b08b273d0b0b7720dd591b532e424  ./ft2324/page-preview-1/index.html
+06041df5b5465cc8762cad1ba01c5c82aca1f49299f41c33963d8c4045f57b09  ./ft2324.pdf
+ecf98d569bb58c3ab951249e34c3a6f40dd74e66205c1c81172bb2018bf47bee  ./ft2324/v1.mp4.gpg
+4e32b453d72605c9beccad562c8737c9229fc29dac3adbc29ebcf1ea531691c3  ./ft2324/v1.mp4.gpg.sha256
+a888fd18b8fe7ee53230e8e208ee4e4b8a72a47f4af881f3132698bb7f55fae9  ./generate-tmp.sh
+2388e728257a0743891abd16bc26cf5ee8319cb9198fd376746318ff6be67460  ./VvB
