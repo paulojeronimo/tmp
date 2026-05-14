@@ -1,0 +1,183 @@
+= `tmp`: your Git repository to share temporary files via GitHub Pages
+:icons: font
+:nofooter:
+// URIs
+:uri-gpg: https://gnupg.org/
+:uri-github-pages: https://pages.github.com/
+:uri-ghpages-custom-domain: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site
+//
+:uri-my-domain: https://paulojeronimo.com
+:uri-my-github: https://github.com/paulojeronimo
+// A file where you can configure the variables 'uri-my-*' pointed above:
+ifdef::my-variables[]
+include::{my-variables}[]
+endif::[]
+//
+:uri-tmp: {uri-my-domain}/tmp
+:uri-tmp-history: {uri-my-github}/tmp-history
+:uri-tmp-github: {uri-my-github}/tmp
+// Attributes
+:GPG: {uri-gpg}[GPG]
+:GitHubPages: {uri-github-pages}[GitHub Pages]
+:tmp: {uri-tmp-github}[tmp]
+:tmp-history: {uri-tmp-history}[tmp-history]
+:changes-txt: {uri-tmp}/changes.txt[changes.txt]
+
+[.big.text-center]
+*Sometimes you may want a location to share a temporary file with the following
+conditions:*
+
+. The file should be associated with one of your known public domains.
+ifndef::env-github[]
+In my case, the domain {uri-my-domain}.
+endif::[]
+. The file name could be automatically generated for you, via a script, with a
+small length and random characters.
+. The file could be encrypted. Ideally, you would use software like {GPG} for
+this.
+. Only you should be capable of removing the file.
+. Whenever you add, update or remove a file in this location, a file
+{changes-txt} stating the changes were made should be updated.
+.. This file should be audited by the command `git log` so you can see, at any
+time, what modifications were made in the place.
+
+[.big.text-center]
+*This project helps you to achieve the conditions above using {GitHubPages}!*
+
+The `tmp` git repository always contains a single commit and many temporary
+files. This repo can also have <<bash-scripts,Bash scripts>> and other files
+that are persistent in another git repository (`tmp-history`). So, for the
+`tmp` repository, don't expect you can make a clone of it, thinking you'll pull
+it later because that won't work.
+ifndef::env-github[]
+In technical words:
+
+[subs=attributes+]
+----
+$ git clone {uri-tmp-github} # <- it will always works!
+$ git pull {uri-tmp-github}  # <- it may not work!
+----
+endif::[]
+
+The files generated in this repository are accessible through the URL
+https://your-github-name.github.io/tmp/.
+
+ifndef::env-github[]
+NOTE: In my case, {uri-ghpages-custom-domain}[I configured GitHub Pages as my
+custom domain]. So, my `tmp` repo is available here: {uri-tmp}.
+endif::[]
+
+*The SHA256 of the temporary files* stored here keeps alive (and constantly
+updated) in `tmp-history`/blob/main/changes.txt (on GitHub).
+So, you can audit if there was any change in the files pointed out by it.
+
+All the files that are not temporary in the `tmp` repository are also available
+in the repository `tmp-history` with a history of changes associated with them.
+
+[[bash-scripts]]
+[.big.text-center]
+*This is the list of the scripts available (in alphabetical order):*
+
+* link:fork.sh[] -> this script creates a fork of the repository `tmp-history`
+to you.
+* link:generate-random-file.sh[] -> this script is responsible for creating a
+file with a random and unique name in this directory. Possibly, the contents of
+this file will be encrypted via {GPG}.
+* link:generate-tmp.sh[] -> this script generates the `tmp` git repository.
+* link:publish-to-gh-pages.sh[] -> this script is responsible for recreating
+the `tmp` repository every time it is called.
+* link:README.build.sh[] -> this script rebuilds this page (`index.html`).
+* link:update-history.sh[] -> this script is called by `publish-to-gh-pages.sh`
+and is responsible to update the repository `tmp-history` by copying any
+persistent files that were changed to it and by generating the file
+{changes-txt}.
+
+[.big.text-center]
+*Use cases of the scripts above:*
+
+.You want to fork this project to start using it
+[%collapsible]
+====
+* Step 1 -> Create the Git repositories `tmp-history` and `tmp` in your GitHub
+account. Leave them blank because they will be filled in the next steps.
+* Step 2 -> Use the link:fork.sh[] script. It will clone the `tmp-history` from
+an existing origin. Type:
++
+----
+$ bash <(curl -s https://raw.githubusercontent.com/paulojeronimo/tmp-history/main/fork.sh)
+----
+* Step 3 -> Go to the generated `tmp-history` directory, created in the step
+above, and call the script link:generate-tmp.sh[]
++
+----
+$ cd tmp-history
+$ ./generate-tmp.sh
+----
+* Step 4 -> Start using your `tmp` directory to store temporary or persistent
+files. Remember: persistent files need to be manually copied to the
+`tmp-history` repository. So their history will be kept.
+====
+
+.You want to generate a random file (in `tmp`) to use it in your script
+[%collapsible]
+====
+----
+$ ./generate-random-file.sh
+----
+
+To specify the size (length) of the file name use:
+
+----
+$ size=5 ./generate-random-file.sh
+----
+
+To remove the generated temporary files that have no content, type:
+
+----
+$ find . -maxdepth 1 -type f -size 0 -delete
+----
+====
+
+.You want to publish the contents of your directory `tmp`
+[%collapsible]
+====
+----
+$ ./publish-to-gh-pages.sh
+----
+====
+
+.You can turn some files persistent by copying them from `tmp` to `tmp-history`
+[%collapsible]
+====
+This way they will no longer be temporary and your change history will remain
+there (in `tmp-history`).
+
+----
+$ cp file1 file2 ../tmp-history
+----
+
+NOTE: In the `update-history.sh` script, the `history_dir` variable also points
+to a `tmp-history` inside the parent directory of `tmp` repository. So, if your
+`tmp-history` directory have a different name, you need to configure this
+variable.
+====
+
+.You want to rebuild this page (`index.html`) using your own variables
+[%collapsible]
+====
+Create a  file named `my-variables.adoc` and configure the AsciiDoc attributes
+`uri-my-*`. This is a sample of how to do this:
+
+----
+$ cat > my-variables.adoc <<EOF
+:uri-my-domain: https://my-user.github.io/
+:uri-my-github: https://github.com/my-user
+EOF
+----
+
+Rebuild the `index.html` with this command:
+
+----
+$ ./README.build.sh
+----
+====
